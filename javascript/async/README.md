@@ -4,16 +4,13 @@
 
 ### August 4, 2026
 
-## Topics Covered
+#### Topics Covered
 
 - Synchronous vs Asynchronous JavaScript
-- `setTimeout()`
 - Callback functions
+- `setTimeout()`
 - Promises
 - Promise states
-  - Pending
-  - Fulfilled
-  - Rejected
 - `Promise.resolve()`
 - `Promise.reject()`
 - `.then()`
@@ -22,68 +19,43 @@
 - `await`
 - Creating Promises with `new Promise()`
 
----
+#### Exercises Completed
 
-## Exercises Completed
-
-### ✅ Easy Questions
-
-- Predict asynchronous execution order
-- Creating callback functions
-- Delayed execution with `setTimeout()`
-- Passing data through callbacks
-- Creating resolved Promises
-- Creating rejected Promises
-- Returning values from `async` functions
-- Using `await`
-- Simulating asynchronous calculations
-- Creating and awaiting a delayed Promise
+- ✅ Easy Questions
 
 ---
 
-## Notes
+### August 5, 2026
 
-### Synchronous JavaScript
+#### Topics Covered
 
-JavaScript executes one line of code at a time.
+- Fake backend API calls
+- Consuming Promises with `await`
+- Sequential asynchronous requests
+- Building objects from asynchronous data
+- Error handling with `try...catch`
+- Returning transformed asynchronous data
+- Introduction to parallel requests (`Promise.all()`)
 
-```js
-console.log("A");
-console.log("B");
-console.log("C");
-```
+#### Exercises Completed
 
-Output:
-
-```text
-A
-B
-C
-```
+- ✅ Medium Questions
 
 ---
 
-### Asynchronous JavaScript
+# Notes
 
-Some operations take time to complete.
+## Synchronous vs Asynchronous
 
-Examples include:
+Synchronous code executes one line at a time.
 
-- API requests
-- Database queries
-- File uploads
-- Timers
-- Reading files
-
-Instead of blocking the application while waiting, JavaScript starts the operation and continues executing the remaining synchronous code.
+Asynchronous operations (API requests, timers, file uploads, etc.) allow JavaScript to continue executing other code while waiting for a result.
 
 ---
 
-### Callback Functions
+## Callback Functions
 
-A callback is a function passed to another function that will be executed later.
-
-Example:
+A callback is a function passed to another function that executes later.
 
 ```js
 setTimeout(() => {
@@ -91,135 +63,59 @@ setTimeout(() => {
 }, 1000);
 ```
 
-Callbacks are commonly used for:
-
-- Timers
-- Event listeners
-- Asynchronous operations
-
 ---
 
-### Promises
+## Promises
 
-A Promise represents a value that will become available in the future.
+A Promise represents a future value.
 
-A Promise always exists in one of three states:
+Promise states:
 
 - Pending
 - Fulfilled
 - Rejected
 
-Example:
-
 ```js
 const users = fetch("/users");
 ```
 
-`users` is **not** the user data.
-
-It is a **Promise** that will eventually resolve with the user data.
+`users` is a Promise, **not** the user data.
 
 ---
 
-### Resolving a Promise
+## `.then()` & `.catch()`
 
-```js
-const promise = new Promise((resolve) => {
-  resolve("Success");
-});
-```
-
-Calling `resolve()` fulfills the Promise and provides its value.
-
----
-
-### Rejecting a Promise
-
-```js
-const promise = new Promise((resolve, reject) => {
-  reject("Network Error");
-});
-```
-
-Calling `reject()` marks the Promise as failed and provides an error.
-
----
-
-### `.then()`
-
-`.then()` registers a callback that executes when a Promise is fulfilled.
-
-```js
-fetch("/users").then((users) => {
-  console.log(users);
-});
-```
-
-Think of it as:
-
-> "When this Promise finishes successfully, run this code."
-
----
-
-### `.catch()`
+`.then()` runs when a Promise resolves.
 
 `.catch()` handles rejected Promises.
 
 ```js
 fetch("/users")
-  .then((users) => {
-    console.log(users);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+  .then((users) => console.log(users))
+  .catch((error) => console.error(error));
 ```
-
-Think of it as:
-
-> "If something goes wrong, handle the error here."
 
 ---
 
-### `async`
+## `async` / `await`
 
-Adding the `async` keyword to a function automatically makes it return a Promise.
+Every `async` function automatically returns a Promise.
 
-```js
-async function getColor() {
-  return "Blue";
-}
-```
-
-This is equivalent to:
+`await` pauses **only the current async function** until a Promise resolves.
 
 ```js
-function getColor() {
-  return Promise.resolve("Blue");
+async function loadUsers() {
+  const users = await fetch("/users");
+
+  return users;
 }
 ```
 
 ---
 
-### `await`
+## `new Promise()`
 
-`await` pauses the current **async function** until a Promise resolves.
-
-```js
-const users = await fetch("/users");
-```
-
-It **does not pause JavaScript** or freeze the application.
-
-Only the current async function waits.
-
----
-
-### `new Promise()`
-
-Use `new Promise()` when creating your own asynchronous operation.
-
-Example:
+Use `new Promise()` when creating your own asynchronous operations.
 
 ```js
 function wait(ms) {
@@ -229,31 +125,45 @@ function wait(ms) {
 }
 ```
 
-This is useful when converting callback-based code into Promise-based code.
+Most of the time, you'll consume existing Promises rather than create new ones.
 
 ---
 
-## Key Takeaways
+## Sequential Requests
 
-- JavaScript executes synchronous code before asynchronous callbacks.
-- `setTimeout()` does not block execution.
-- Callback functions are executed later by another function.
-- `fetch()` immediately returns a Promise, not the requested data.
-- A Promise represents a future value.
-- Promises have three states: Pending, Fulfilled, and Rejected.
-- `resolve()` fulfills a Promise.
-- `reject()` rejects a Promise.
-- `.then()` runs after a Promise is fulfilled.
-- `.catch()` handles rejected Promises.
-- Every `async` function automatically returns a Promise.
-- `await` unwraps the value from a Promise.
-- `await` only pauses the current async function.
-- Avoid creating a new Promise when an `async` function alone is sufficient.
-- Use `new Promise()` primarily to wrap callback-based APIs such as `setTimeout()`.
+Use sequential requests when the second operation depends on the first.
+
+```js
+const user = await fetchUser();
+const posts = await fetchPosts(user.id);
+```
 
 ---
 
-## Common Mistakes
+## Parallel Requests
+
+If two requests are independent, run them together.
+
+```js
+const [users, products] = await Promise.all([fetchUsers(), fetchProducts()]);
+```
+
+---
+
+# Key Takeaways
+
+- JavaScript never blocks while waiting for asynchronous operations.
+- `fetch()` returns a Promise immediately.
+- `await` unwraps the value inside a Promise.
+- `async` automatically returns a Promise.
+- Use `try...catch` to handle rejected Promises.
+- Use `new Promise()` mainly when wrapping callback-based APIs.
+- Dependent requests should be executed sequentially.
+- Independent requests should use `Promise.all()`.
+
+---
+
+# Common Mistakes
 
 ❌ Logging a Promise instead of its resolved value.
 
@@ -261,35 +171,29 @@ This is useful when converting callback-based code into Promise-based code.
 console.log(fetch("/users"));
 ```
 
-✔️ Wait for the Promise.
+✔️
 
 ```js
 const users = await fetch("/users");
 ```
 
-or
-
-```js
-fetch("/users").then((users) => {
-  console.log(users);
-});
-```
-
 ---
 
-❌ Forgetting to return a callback result.
+❌ Creating unnecessary Promises.
 
 ```js
-function calculate(a, b, callback) {
-  callback(a, b);
+async function getColor() {
+  return new Promise((resolve) => {
+    resolve("Blue");
+  });
 }
 ```
 
 ✔️
 
 ```js
-function calculate(a, b, callback) {
-  return callback(a, b);
+async function getColor() {
+  return "Blue";
 }
 ```
 
@@ -311,10 +215,10 @@ async function loadUsers() {
 
 ---
 
-## Next Steps
+# Next Steps
 
-- Simulate API requests using fake asynchronous functions
-- Sequential vs. parallel asynchronous operations
-- Error handling with `try...catch`
 - `Promise.all()`
-- Real API requests using `fetch()`
+- Parallel vs. sequential requests
+- Real API requests with `fetch()`
+- HTTP responses & JSON parsing
+- Mini project using a public API
