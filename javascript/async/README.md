@@ -36,10 +36,22 @@
 - Error handling with `try...catch`
 - Returning transformed asynchronous data
 - Introduction to parallel requests (`Promise.all()`)
+- Combining async code with:
+  - `filter()`
+  - `map()`
+  - `reduce()`
+  - Dynamic object keys
+  - Nested arrays and objects
+- Calculating totals, averages, and summaries from async results
+- Distinguishing dependent and independent requests
 
 #### Exercises Completed
 
 - ✅ Medium Questions
+- ✅ Hard Questions
+- ✅ Nested async data transformation challenge
+- ✅ Error handling challenge
+- ✅ Sequential vs parallel request practice
 
 ---
 

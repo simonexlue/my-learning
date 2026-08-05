@@ -17,7 +17,7 @@ This repository is my personal knowledge base where I practice concepts, solve i
 ## JavaScript
 
 - [x] Fundamentals
-- [ ] Async JavaScript
+- [x] Async JavaScript
 - [ ] Closures
 - [ ] Prototypes
 - [ ] Classes
@@ -61,7 +61,6 @@ Each topic contains:
 - Notes
 - Interview questions
 - Personal takeaways
-- Resources used
 
 ---
 
