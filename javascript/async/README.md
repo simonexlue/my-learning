@@ -226,11 +226,3 @@ async function loadUsers() {
 ```
 
 ---
-
-# Next Steps
-
-- `Promise.all()`
-- Parallel vs. sequential requests
-- Real API requests with `fetch()`
-- HTTP responses & JSON parsing
-- Mini project using a public API
