@@ -2,7 +2,7 @@
 
 ## Progress Log
 
-### August 13, 2026
+### August 14, 2026
 
 #### Topics Covered
 
@@ -19,13 +19,17 @@
 - `super()`
 - Method overriding
 - Composition
-- Basic polymorphism
+- Polymorphism
+- Designing relationships between multiple classes
+- Managing collections of objects
+- Interchangeable object behavior
+- Combining inheritance, composition, and encapsulation
 
 #### Exercises Completed
 
 - ✅ Easy Questions (1–13)
-- ⬜ Medium Questions
-- ⬜ Hard / Design Questions
+- ✅ Medium Questions (1–5)
+- ⬜ Hard Questions
 
 ---
 
@@ -219,6 +223,131 @@ function notify(notification, message) {
 
 It does not need to know which specific notification class it received.
 
+The same pattern can be used with different kinds of behavior:
+
+```js
+discount.apply(amount);
+employee.calculatePay();
+sender.send(recipient, message);
+```
+
+The calling class does not need to know which specific implementation it received.
+
+---
+
+# OOP Relationships
+
+When designing multiple classes, first think about how the objects relate to each other.
+
+## IS-A
+
+Usually indicates inheritance.
+
+```text
+FullTimeEmployee IS AN Employee
+HourlyEmployee IS AN Employee
+GraduateRecord IS A StudentRecord
+```
+
+## HAS-A
+
+Usually indicates composition.
+
+```text
+Library HAS Books
+Payroll HAS Employees
+Order HAS Products
+Contact HAS a Sender
+```
+
+---
+
+# Medium OOP Patterns Practiced
+
+## Objects Managing Other Objects
+
+Classes can store and work with collections of other objects.
+
+```js
+addEmployee(employee) {
+  this.employees.push(employee);
+}
+```
+
+The complete object should usually be stored when its other properties or methods will be needed later.
+
+---
+
+## Asking Objects to Perform Their Own Behavior
+
+Instead of one class determining what type of object it received:
+
+```js
+if (employee.type === "fullTime") {
+  // ...
+}
+```
+
+the object can provide its own behavior:
+
+```js
+employee.calculatePay();
+```
+
+This allows different employee types to calculate their pay differently.
+
+---
+
+## Interchangeable Objects
+
+A class can receive another object and use a common method without knowing its exact class.
+
+```js
+class Order {
+  constructor(discount) {
+    this.discount = discount;
+  }
+
+  getTotal() {
+    return this.discount.apply(this.getSubtotal());
+  }
+}
+```
+
+Different discount objects can then provide different implementations:
+
+```js
+NoDiscount;
+PercentageDiscount;
+FixedDiscount;
+```
+
+while `Order` always uses:
+
+```js
+this.discount.apply(amount);
+```
+
+---
+
+## Changing Behavior Through Composition
+
+An object can change its behavior by replacing an object it uses.
+
+```js
+changeSender(sender) {
+  this.sender = sender;
+}
+```
+
+For example:
+
+```js
+contact.changeSender(new PushSender());
+```
+
+The `Contact` class itself does not need to change.
+
 ---
 
 # Key Takeaways
@@ -226,38 +355,43 @@ It does not need to know which specific notification class it received.
 - Classes are blueprints for creating objects.
 - `constructor()` initializes an object's state.
 - `this` refers to the current instance.
-- Private `#` fields help protect internal state.
+- Private `#` fields protect internal state.
 - Encapsulation controls how state is accessed and modified.
 - Inheritance represents an **IS-A** relationship.
 - `extends` creates a child class.
 - `super()` calls the parent constructor.
 - Child classes can override inherited methods.
 - Composition represents a **HAS-A** relationship.
-- Polymorphism allows different objects to be used through the same methods.
+- Classes can store and interact with other objects.
+- Polymorphism allows different objects to respond to the same method differently.
+- Code can ask an object to perform its own behavior instead of checking what type it is.
+- Objects can be swapped to change behavior without rewriting the class that uses them.
 
 ---
 
 # Common Mistakes
 
-### Storing the wrong thing during composition
+## Forgetting to Return a Value
 
-If a class should store objects:
-
-```js
-this.#students.push(student); // ✅
-```
-
-not just:
+Calling or calculating something does not automatically return it.
 
 ```js
-this.#students.push(student.name);
+getStudentCount() {
+  this.#students.length; // ❌ returns undefined
+}
 ```
 
-This preserves access to the entire object.
+Instead:
+
+```js
+getStudentCount() {
+  return this.#students.length;
+}
+```
 
 ---
 
-### Confusing inheritance and composition
+## Confusing Inheritance and Composition
 
 Ask:
 
@@ -269,24 +403,49 @@ HAS-A relationship → composition
 
 ---
 
+## Checking Object Types Instead of Using Polymorphism
+
+Avoid designs like:
+
+```js
+if (employee.type === "fullTime") {
+  // ...
+} else if (employee.type === "hourly") {
+  // ...
+}
+```
+
+Prefer giving each object the same method:
+
+```js
+employee.calculatePay();
+```
+
+and letting each class decide how that method works.
+
+---
+
 # Next Steps
 
-## Medium OOP
+## Hard OOP
 
-- Combine multiple classes
-- Decide between inheritance and composition
-- Work with private state
-- Override behavior
-- Manage collections of objects
-- Use polymorphism without explicit type checks
-- Solve problems without being told which OOP concept to use
+Increase the difficulty while continuing to practice the same OOP concepts:
+
+- Design larger systems with multiple interacting classes
+- Decide between inheritance and composition independently
+- Combine encapsulation, inheritance, composition, and polymorphism
+- Manage more complex object state
+- Handle additional edge cases and business rules
+- Design clean relationships between objects without being told which OOP concept to use
 
 ## After OOP
 
-Move into **SOLID principles**:
+Create a separate **SOLID** folder and introduce each principle at Easy difficulty:
 
-- Single Responsibility Principle
-- Open/Closed Principle
-- Liskov Substitution Principle
-- Interface Segregation Principle
-- Dependency Inversion Principle
+1. Single Responsibility Principle (SRP)
+2. Open/Closed Principle (OCP)
+3. Liskov Substitution Principle (LSP)
+4. Interface Segregation Principle (ISP)
+5. Dependency Inversion Principle (DIP)
+
+Then increase SOLID difficulty separately after each principle has been introduced and practiced.
